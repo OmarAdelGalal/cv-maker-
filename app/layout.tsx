@@ -1,5 +1,6 @@
 import './globals.css';
 import React from 'react';
+import Script from 'next/script';
 import InteractiveBackground from '../components/InteractiveBackground';
 
 export const metadata = {
@@ -60,6 +61,12 @@ export default function RootLayout({
           <div className="bg-perspective-grid"></div>
         </div>
         <InteractiveBackground />
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2429659904005180"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
         {children}
       </body>
     </html>
