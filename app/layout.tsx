@@ -2,7 +2,7 @@ import './globals.css';
 import React from 'react';
 import Script from 'next/script';
 import InteractiveBackground from '../components/InteractiveBackground';
-
+import { Analytics } from "@vercel/analytics/next"
 export const metadata = {
   title: 'SmartPath AI - Free ATS Resume Builder & Analyzer',
   description: 'Create an ATS-friendly professional resume for free using Google Gemini AI. Instantly scan formatting, analyze keyword match density, optimize experience bullet points, and download your clean vector-text PDF to secure more interviews.',
@@ -71,6 +71,7 @@ export default function RootLayout({
           strategy="afterInteractive"
         />
         {children}
+        <Analytics />
       </body>
     </html>
   );
