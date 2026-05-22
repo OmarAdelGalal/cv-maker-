@@ -44,7 +44,7 @@ export default function Home() {
   
   // Settings States
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
-  const [apiKey, setApiKey] = useState<string>('AIzaSyDC4aetJ9bzRdsY_FFdw6-IsWSYYek9tgI');
+  const [apiKey, setApiKey] = useState<string>(process.env.NEXT_PUBLIC_GEMINI_API_KEY || 'AIzaSyDC4aetJ9bzRdsY_FFdw6-IsWSYYek9tgI');
   const [model, setModel] = useState<string>('gemini-2.5-flash');
   const [isDemoMode, setIsDemoMode] = useState<boolean>(false);
   
@@ -68,8 +68,9 @@ export default function Home() {
       setTheme(savedTheme);
       document.documentElement.setAttribute('data-theme', savedTheme);
 
-      const savedApiKey = localStorage.getItem('ats_api_key') || 'AIzaSyDC4aetJ9bzRdsY_FFdw6-IsWSYYek9tgI';
+      const savedApiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || 'AIzaSyDC4aetJ9bzRdsY_FFdw6-IsWSYYek9tgI';
       setApiKey(savedApiKey);
+      localStorage.setItem('ats_api_key', savedApiKey);
 
       const savedModel = localStorage.getItem('ats_model') || 'gemini-2.5-flash';
       setModel(savedModel);
@@ -103,10 +104,11 @@ export default function Home() {
   };
 
   const handleSaveSettings = (settings: Settings) => {
-    setApiKey(settings.apiKey);
+    const activeKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || 'AIzaSyDC4aetJ9bzRdsY_FFdw6-IsWSYYek9tgI';
+    setApiKey(activeKey);
     setModel(settings.model);
     setIsDemoMode(settings.isDemoMode);
-    localStorage.setItem('ats_api_key', settings.apiKey);
+    localStorage.setItem('ats_api_key', activeKey);
     localStorage.setItem('ats_model', settings.model);
     localStorage.setItem('ats_demo_mode', JSON.stringify(settings.isDemoMode));
     showToast('Settings saved successfully!');

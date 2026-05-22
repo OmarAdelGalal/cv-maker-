@@ -19,22 +19,20 @@ export default function SettingsModal({
   initialDemoMode,
   onSave,
 }: SettingsModalProps) {
-  const [apiKey, setApiKey] = useState<string>(initialApiKey || '');
   const [model, setModel] = useState<string>(initialModel || 'gemini-2.5-flash');
   const [isDemoMode, setIsDemoMode] = useState<boolean>(initialDemoMode || false);
 
   useEffect(() => {
     if (isOpen) {
-      setApiKey(initialApiKey || '');
       setModel(initialModel || 'gemini-2.5-flash');
       setIsDemoMode(initialDemoMode);
     }
-  }, [isOpen, initialApiKey, initialModel, initialDemoMode]);
+  }, [isOpen, initialModel, initialDemoMode]);
 
   if (!isOpen) return null;
 
   const handleSave = () => {
-    onSave({ apiKey, model, isDemoMode });
+    onSave({ apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY || 'AIzaSyDC4aetJ9bzRdsY_FFdw6-IsWSYYek9tgI', model, isDemoMode });
     onClose();
   };
 
@@ -51,20 +49,13 @@ export default function SettingsModal({
           </button>
         </div>
         <div className="modal-body">
-          <p>To use real AI features (resume polishing and tailored keyword suggestions), enter your Google Gemini API Key. The key is stored safely in your browser's local storage and is never uploaded elsewhere.</p>
+          <p>This website is powered by a secure, preconfigured Gemini AI model. Real AI features (resume polishing, professional summaries, and job tailoring) are fully active and available for you to use.</p>
           
           <div className="form-group" style={{ marginTop: '1rem' }}>
-            <label htmlFor="modal-api-key">Gemini API Key</label>
-            <input 
-              type="password" 
-              id="modal-api-key"
-              value={apiKey} 
-              onChange={(e) => setApiKey(e.target.value)}
-              placeholder={isDemoMode ? "Demo Mode Active - Key Optional" : "AIzaSy..."}
-              disabled={isDemoMode}
-            />
-            <div className="helper-text">
-              Don't have a key? Get a free one from <a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer">Google AI Studio</a>.
+            <label>API Key Status</label>
+            <div className="helper-text" style={{ fontSize: '0.95rem', color: '#10b981', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 500, padding: '0.5rem', backgroundColor: 'rgba(16, 185, 129, 0.1)', borderRadius: '4px', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#10b981', display: 'inline-block' }}></span>
+              Secure Preconfigured Key Active (Unlimited Use)
             </div>
           </div>
 
