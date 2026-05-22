@@ -1772,15 +1772,20 @@
     }
   }
 
+  /* Disable browser-default headers and footers by setting print page margins to 0 globally */
+  @page {
+    size: letter;
+    margin: 0;
+  }
+
   /* ==========================================================================
      Strict ATS Print Stylesheet (@media print)
      ========================================================================== */
 
   @media print {
-    /* Set document size to US Letter standard size */
     @page {
       size: letter;
-      margin: 0.5in;
+      margin: 0;
     }
   
     /* Reset layout structure for print execution */
@@ -1839,7 +1844,7 @@
     .cv-paper {
       background-color: #ffffff !important;
       color: #000000 !important;
-      padding: 0 !important;
+      padding: 0.6in 0.6in !important; /* Set professional paper margins inside container */
       margin: 0 !important;
       width: 100% !important;
       height: auto !important;

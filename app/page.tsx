@@ -87,6 +87,29 @@ export default function Home() {
     }
   }, [cvData]);
 
+  // Manage document title during printing to completely eliminate default browser headers/footers
+  useEffect(() => {
+    const handleBeforePrint = () => {
+      // Store original title
+      (window as any)._originalTitle = document.title;
+      // Set title to single space to keep printed page header completely empty
+      document.title = " ";
+    };
+
+    const handleAfterPrint = () => {
+      if ((window as any)._originalTitle) {
+        document.title = (window as any)._originalTitle;
+      }
+    };
+
+    window.addEventListener('beforeprint', handleBeforePrint);
+    window.addEventListener('afterprint', handleAfterPrint);
+    return () => {
+      window.removeEventListener('beforeprint', handleBeforePrint);
+      window.removeEventListener('afterprint', handleAfterPrint);
+    };
+  }, []);
+
   // Toast helper
   const showToast = (message: string, type: Toast['type'] = 'success') => {
     const id = Date.now();
