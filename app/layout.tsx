@@ -38,6 +38,9 @@ export const metadata = {
     title: 'SmartPath AI - Free ATS Resume Builder & AI CV Optimizer',
     description: 'Generate parser-friendly resumes with Google Gemini AI. Instant scoring checklist, keyword matching, and PDF print formatting.',
   },
+  other: {
+    'google-adsense-account': 'ca-pub-2429659904005180',
+  },
 };
 
 export default function RootLayout({
