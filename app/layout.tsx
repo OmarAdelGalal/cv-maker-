@@ -71,7 +71,7 @@ export default function RootLayout({
           strategy="afterInteractive"
         />
         {children}
-    
+        <Analytics />
       </body>
     </html>
   );
