@@ -44,7 +44,7 @@ export default function Home() {
   
   // Settings States
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
-  const [apiKey, setApiKey] = useState<string>(process.env.NEXT_PUBLIC_GEMINI_API_KEY || 'AIzaSyDC4aetJ9bzRdsY_FFdw6-IsWSYYek9tgI');
+  const [apiKey, setApiKey] = useState<string>(process.env.NEXT_PUBLIC_GEMINI_API_KEY || 'AIzaSyATGBiTPwj5saguuwx_wZvQWPCJmP0P0-w');
   const [model, setModel] = useState<string>('gemini-2.5-flash');
   const [isDemoMode, setIsDemoMode] = useState<boolean>(false);
   
@@ -68,7 +68,7 @@ export default function Home() {
       setTheme(savedTheme);
       document.documentElement.setAttribute('data-theme', savedTheme);
 
-      const savedApiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || 'AIzaSyDC4aetJ9bzRdsY_FFdw6-IsWSYYek9tgI';
+      const savedApiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || 'AIzaSyATGBiTPwj5saguuwx_wZvQWPCJmP0P0-w';
       setApiKey(savedApiKey);
       localStorage.setItem('ats_api_key', savedApiKey);
 
@@ -127,7 +127,7 @@ export default function Home() {
   };
 
   const handleSaveSettings = (settings: Settings) => {
-    const activeKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || 'AIzaSyDC4aetJ9bzRdsY_FFdw6-IsWSYYek9tgI';
+    const activeKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || 'AIzaSyATGBiTPwj5saguuwx_wZvQWPCJmP0P0-w';
     setApiKey(activeKey);
     setModel(settings.model);
     setIsDemoMode(settings.isDemoMode);
