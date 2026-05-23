@@ -2,51 +2,6 @@
  * Gemini API client for the ATS Resume Builder
  */
 
-const API_BASE_URL = 'https://generativelanguage.googleapis.com/v1beta/models';
-
-/**
- * Sends a prompt to the Gemini API
- */
-async function callGemini(apiKey: string, model: string, systemPrompt: string, userPrompt: string): Promise<string> {
-  const url = `${API_BASE_URL}/${model}:generateContent?key=${apiKey}`;
-  
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      contents: [
-        {
-          role: 'user',
-          parts: [
-            {
-              text: `${systemPrompt}\n\nUser Input:\n${userPrompt}`
-            }
-          ]
-        }
-      ],
-      generationConfig: {
-        temperature: 0.3,
-        maxOutputTokens: 2048,
-      }
-    })
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.error?.message || `API call failed with status ${response.status}`);
-  }
-
-  const data = await response.json();
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!text) {
-    throw new Error('Empty response from Gemini API');
-  }
-
-  return text;
-}
-
 /**
  * Refine Professional Summary
  */
@@ -56,7 +11,7 @@ export async function improveSummary(
   model: string = 'gemini-2.5-flash',
   isDemo: boolean = false
 ): Promise<string> {
-  if (isDemo || !apiKey) {
+  if (isDemo) {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve(`Result-driven professional with hands-on experience as a ${summary.split(' ').slice(0, 3).join(' ') || 'Specialist'}. Adept at designing scalable solutions, driving efficiency, and collaborating across cross-functional teams. Proven track record of leveraging modern frameworks to optimize workflow productivity and deliver measurable business value.`);
@@ -64,16 +19,25 @@ export async function improveSummary(
     });
   }
 
-  const systemPrompt = `You are a professional resume writer and ATS optimization specialist.
-Rewrite the user's professional summary to be concise, impactful, and rich in industry-relevant keywords.
-Guidelines:
-1. Start with a strong professional title (e.g., "Result-driven Senior Software Engineer...").
-2. Highlight core expertise and key achievements.
-3. Do not use generic buzzwords or cliché phrases.
-4. Keep it under 4 sentences or ~70 words.
-5. Return ONLY the rewritten summary, without any introductory or concluding text, explanations, or quotes.`;
+  const response = await fetch('/api/gemini', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      action: 'improveSummary',
+      summary,
+      model,
+    }),
+  });
 
-  return callGemini(apiKey, model, systemPrompt, summary);
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.error || `API call failed with status ${response.status}`);
+  }
+
+  const data = await response.json();
+  return data.text;
 }
 
 /**
@@ -85,7 +49,7 @@ export async function improveBulletPoint(
   model: string = 'gemini-2.5-flash',
   isDemo: boolean = false
 ): Promise<string> {
-  if (isDemo || !apiKey) {
+  if (isDemo) {
     return new Promise((resolve) => {
       setTimeout(() => {
         const lines = description.split('\n').filter(line => line.trim().length > 0);
@@ -100,17 +64,25 @@ export async function improveBulletPoint(
     });
   }
 
-  const systemPrompt = `You are an ATS resume optimization writer.
-Optimize the following job experience description bullet points to be action-verb and achievement-oriented.
-Guidelines:
-1. Each bullet point MUST start with a strong action verb (e.g., Spearheaded, Orchestrated, Designed, Engineered, Formulated).
-2. Focus on the impact and result of the action (use metrics, percentages, or concrete values where possible).
-3. Do not use passive voice (e.g., "Responsible for...").
-4. Keep bullet points concise and professional.
-5. Format the output with clear bullet points (using '-' or '*').
-6. Return ONLY the polished bullet points, without introductory or concluding text.`;
+  const response = await fetch('/api/gemini', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      action: 'improveBulletPoint',
+      description,
+      model,
+    }),
+  });
 
-  return callGemini(apiKey, model, systemPrompt, description);
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.error || `API call failed with status ${response.status}`);
+  }
+
+  const data = await response.json();
+  return data.text;
 }
 
 /**
@@ -123,7 +95,7 @@ export async function tailorResume(
   model: string = 'gemini-2.5-flash',
   isDemo: boolean = false
 ): Promise<string> {
-  if (isDemo || !apiKey) {
+  if (isDemo) {
     return new Promise((resolve) => {
       setTimeout(() => {
         // Extract words from JD to make it look tailored
@@ -160,21 +132,24 @@ export async function tailorResume(
     });
   }
 
-  const systemPrompt = `You are an expert ATS Resume Recruiter and Optimizer.
-Analyze the user's resume details and the target Job Description to identify keyword gaps and suggest tailoring improvements.
-Format your output in clean Markdown.
+  const response = await fetch('/api/gemini', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      action: 'tailorResume',
+      resumeData,
+      jobDescription,
+      model,
+    }),
+  });
 
-Input details:
-Resume: ${JSON.stringify(resumeData)}
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.error || `API call failed with status ${response.status}`);
+  }
 
-Guidelines:
-1. Identify the top 5-10 essential keywords and technical skills requested in the Job Description.
-2. Review the user's resume data and see if those keywords are missing or underutilized.
-3. Provide a tailored Professional Summary designed to catch the recruiter's eye and match the ATS keyword filters.
-4. List specific, actionable modifications:
-   - Which skills to add to the Skills list.
-   - How to tweak work experience bullet points to integrate the missing keywords naturally.
-5. Do NOT write full HTML. Return clean, formatted Markdown.`;
-
-  return callGemini(apiKey, model, systemPrompt, jobDescription);
+  const data = await response.json();
+  return data.text;
 }

@@ -32,7 +32,7 @@ export default function SettingsModal({
   if (!isOpen) return null;
 
   const handleSave = () => {
-    onSave({ apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY || 'AIzaSyATGBiTPwj5saguuwx_wZvQWPCJmP0P0-w', model, isDemoMode });
+    onSave({ apiKey: '', model, isDemoMode });
     onClose();
   };
 
