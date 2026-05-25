@@ -51,6 +51,7 @@ export default function RootLayout({
   return (
     <html lang="en" data-theme="dark">
       <head>
+        <script src="https://quge5.com/88/tag.min.js" data-zone="243003" async data-cfasync="false"></script>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet" />
